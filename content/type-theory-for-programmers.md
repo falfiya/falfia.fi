@@ -7,6 +7,59 @@ categories = ["tutorial"]
 tags = ["math", "type theory", "computer science"]
 +++
 
+*This post assumes basic familiarity with JavaScript, TypeScript, Python, or some other programming language.*
+
+## What are Types?
+
+If you're a programmer, chances are you've run into types.
+
+
+
+## Type Systems
+
+Let's look at an example program in JavaScript:
+
+```js
+// add3x.js
+function add3x(i) {
+   return i + i + i;
+}
+```
+
+- Check errors
+- Give more information to the programmer
+- Produce optimized programs
+
+```python
+def add_3x(i):
+   return i + i + i
+```
+
+```c
+int add_3x(int i) {
+   return i + i + i;
+}
+```
+
+## Motivation for Type Theories
+
+From a programmer's perspective, the primary motivation for type theories is *terseness*, *formality*, and *precision*.
+
+From here on out, let's use $x$, $y$, and $z$ to refer to expressions. They could be any expression such as:
+
+- `1 + 2`
+- `5 * f(3)`
+- `"hello" + " world"`
+- `foobar`
+
+
+
+In today's blog post, we're going to be trying to understand this:
+
+$$
+\frac{\Gamma \vdash f : \tau \rightarrow \tau' \quad \Gamma \vdash x : \tau}{\Gamma \vdash f\\,x : \tau'}
+$$
+
 Today we are going to look at simple type theory. I've often found type theory
 to be somewhat inaccessible because of the notational barrier and so this is a
 guide for programmers to get into type theory.
@@ -87,3 +140,7 @@ function debounce(func, wait) {
   };
 }
 ```
+
+## Citations
+
+1. a
