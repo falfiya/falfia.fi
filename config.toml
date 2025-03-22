@@ -29,7 +29,7 @@ radion_menu = [
    {url = "$BASE_URL/tags", name = "Tags"},
 ]
 latex = true
-favicon = false
+favicon = true
 theme = "light"
 github = "https://github.com/falfiya"
 comments = false
