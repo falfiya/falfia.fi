@@ -1,5 +1,5 @@
 +++
-title = "Type Theory for Programmers"
+title = "Introduction to Type Theory for Programmers"
 date = 2025-03-22
 
 [taxonomies]
