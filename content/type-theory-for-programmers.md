@@ -9,12 +9,22 @@ tags = ["math", "type theory", "computer science"]
 
 <style>
    pre code table mark {
-      background-color: #ff0000aa !important;
+      background-color:rgba(192, 69, 122, 0.67) !important;
       color: #ffffff; /* White text for better contrast */
    }
    table tbody td:first-child {
       font-weight: inherit !important;
-      color: inherit !important;
+   }
+   table td {
+      vertical-align: middle;
+   }
+   table td p {
+      line-height: 1.5em;
+      margin: 0 !important;
+   }
+   table td pre {
+      margin: 5px !important;
+      /* border-radius: 0 !important; */
    }
 </style>
 
@@ -33,11 +43,15 @@ language.
 In C, C++, Java, and Python, `32.1` is a `float`. Unlike JavaScript, these
 languages differentiate between integers and other real numbers.
 
-## JavaScript in 111 Seconds
+<h2 id="javascript-in-n-seconds">JavaScript in 111 Seconds</h2>
+<script>
+   document.getElementById("javascript-in-n-seconds").innerText =
+      `JavaScript in ${Math.random() * 100 + 100 | 0} Seconds`;
+</script>
 
 To get on the same page, this post is going to use JavaScript for it's examples.
 If you already know JavaScript and TypeScript, you can
-[skip ahead](#motivation-for-type-theories).
+[skip ahead](#dynamic-typing).
 
 Here are some different types in a few programming languages:
 
@@ -201,68 +215,262 @@ We won't use advanced syntax in this post.
 
 ## Dynamic Typing
 
+In dynamically typed languages like JavaScript and Python, you are not
+guaranteed to know the type of variables.
+
 Let's look at an example program in JavaScript:
 
-<a name="add_iij.js"></a>
-
 ```js
-// add_iij.js
-function add_iij(i, j) {
-   return i + i + j;
+// average.js
+function average(a, b) {
+   return (a + b) / 2;
 }
 ```
 
 I can call this function in several different ways:
 
-<table>
-<tr><td>
-
-Call</td><td>
-
 ```js
-add_iij(1, 2)
-add_iij(2.2, 2.4)
-add_iij("had had ", "a better effect on the teacher")
+average(4, 2);         => 3
+average(5.5, 4.5);     => 5
+average(4, "2");       => 21
+average("uh", "oh");   => NaN
 ```
 
-</td></tr>
-<tr>
-
-
-<td>
-
-Result</td>
-
-<td>
-
-```js
-4
-6.800000000000001 // pain
-"had had had had a better effect on the teacher"
-```
-
-</td>
-
-</tr>
-</table>
+Depending on the types of the arguments, something *very* different happens.
+Particularly on lines 3 and 4.
 
 In JavaScript, when you add two numbers, you get another number.
 But when you add two strings, you get another string.
 
-```ts
-number + number => number
-string + string => string
+Additionally, anything plus a string gets you another string.
+People call this behavior *weak-typing*[^2].
+
+```js
+ 1   +  2  == 3
+"1"  + "2" == "12"
+ 1   + "2" == "12"
+null + "y" == "nully"
 ```
 
-## Gradually Typing Statically
+## Graduating to Static Typing
 
-- Check errors
-- Give more information to the programmer
-- Produce optimized programs
+Let's switch to TypeScript and start adding types to our arguments.
+We'd like to prohibit certain inputs that make the function behave strangely.
+
+```ts,hl_lines=6-7,linenos
+// average.ts
+function average(a: number, b: number): number {
+   return (a + b) / 2;
+}
+
+average(4, "2");
+average("uh", "oh");
+```
+
+> Argument of type 'string' is not assignable to parameter of type 'number'.
+
+As desired. In this case, we used types to constrain the function domain,
+thereby shrinking the program execution space to something more representative
+of "average". A smaller execution space is easier to reason about.
+
+With static typing, we can catch bugs that would otherwise be very rare:
+
+```ts,hl_lines=7,linenos
+let x;
+if (Math.random() > 0.001) {
+   x = average(9, 9);
+} else {
+   // very rare!
+   // compiler catches the bug anyways
+   x = average("9", 9);
+}
+```
+
+Another way of thinking about types is as sets.
+
+## Easing Into Math
+
+Our next code sample is rather contrived:
+
+```ts,hl_lines=8,linenos
+// times_two.ts
+function times_two(x: number): number {
+   const y = Math.floor(x) * 2;
+   if (y % 2 === 0) {
+      return y;
+   }
+
+   //return
+}
+```
+
+> Function lacks ending return statement and return type does not include 'undefined'
+
+We, as humans, know that `y` is always an integer multiple of 2. `y` modulo 2
+must be 0.
+Unfortunately, TypeScript isn't that clever yet.
+
+Let's try and talk about that in a more mathematical way.
+The primary motivation for math in this case is terseness, formality, and
+precision.
+To do that, we'll need to briefly cover logic and set theory.
+If you know these, you can [skip ahead](#average.ts-explanation).
+
+- Logical Connectives
+   - Not: $\neg$
+   - And: $\land$
+   - Or: $\lor$
+- Quantifiers
+   - Exists: $\exists$
+   - For All: $\forall$
+- Misc
+   - Such That: $\text{st}$ or $\ni:$
+   - Therefore: $\therefore$
+
+Sets are pretty great.
+They're similar to arrays or lists in that they contain elements, but a set
+cannot have duplicate elements. A value is either in a set or it isn't.
+Unlike a list, the order of elements within a set does not matter.
+
+A set is written using braces.
+The following are sets containing only 1, 2, and 3 and they are all equivalent:
+
+- $\\{1, 2, 3\\}$
+- $\\{1, 2, 3, 1\\}$
+- $\\{3, 2, 1\\}$
+
+To write `a` is an element of `A`, we write $a\\,\in\\,A$.
+
+<center>
+
+$$
+\begin{array}{rcllr}
+1&\in &\\{1, 2, 3\\}& \quad& \text{True}\\\\
+4&\in &\\{1, 2, 3\\}& &\text{False}\\\\
+4&\cancel{\in} &\\{1, 2, 3\\}&& \text{True}\\\\
+\end{array}
+$$
+
+</center>
+
+You can also construct sets using other sets.
+The syntax is $\\{\textit{value}\\,|\\,\textit{conditional}\\}$. For example:
+
+$$
+\begin{align}
+\text{let}\\,A &= \\{1, 2, 3\\} \\\\
+B &= \\{2 * a\\,|\\,a\in A\\} \\\\
+B &= \\{2, 4, 6\\}
+\end{align}
+$$
+
+There are also some common set names:
+
+- Empty Set: $\text{Ø}$
+- Real Numbers: $\mathbb{R}$
+- Integers: $\mathbb{Z}$
+- Positive Integers (Natural Numbers): $\mathbb{N}^+$
+
+<a name="average.ts-explanation"></a>
+<table>
+   <tr><td>TypeScript</td><td>Math</td><td>English</td></tr>
+   <tr>
+
+   <td>
+
+```ts
+function times_two(x: number)
+```
+
+   </td>
+
+   <td>
+$$
+x \in \mathbb{R}
+$$
+
+   </td>
+   <td>
+
+`x` is *some* real number.
+
+   </td>
+   </tr>
+
+   <tr>
+   <td rowspan="2">
+
+```ts
+   const y = Math.floor(x) * 2;
+```
+
+   </td>
+   <td>
+$$
+y = 2 * \text{floor}(x)
+$$
+
+   </td>
+   <td>
+
+`y` is 2 times the floor of `x`.
+
+   </td>
+   </tr>
+
+   <tr>
+   <td>
+
+$$
+y \in \\{2a\\,|\\,a \in \mathbb{Z}\\}
+$$
+
+   </td>
+   <td>
+
+`y` is an integer multiple of 2.
+
+   </td>
+   </tr>
+
+   <tr>
+   <td>
+
+```ts
+   if (y % 2 === 0) {
+      return y;
+   }
+```
+
+   </td>
+   <td>
+
+$$
+\therefore
+mod(y, 2) = 0
+$$
+
+   </td>
+   <td>
+
+Therefore, `y` modulo 2 is 0. The conditional is always true and `y` is
+returned.
+
+   </td>
+   </tr>
+</table>
+
+Was this argument convincing? I think it was.
+But there's a huge problem: we had to use our brain.
+Brains can make mistakes and can be convinced of things that are untrue so this
+proof is ungood.
+
+*I;m Thinking About Thos Types*
+
 
 ## Motivation for Type Theories
 
-From a programmer's perspective, the primary motivation for type theories is *terseness*, *formality*, and *precision*.
+It'd be just great if we could mechanize this process.
 
 From here on out, let's use $x$, $y$, and $z$ to refer to expressions. They could be any expression such as:
 
@@ -289,39 +497,6 @@ Unlike programming languages, math is much more fluid and there is sometimes syn
 
 First, I'm going to introduce basic set theory.
 
-## Basic Set Theory
-
-Have code snippets complete with **clipboard functionality** and **fancy
-language tags**. No more boring code snippets in your pages. Oh yeah baby! Click
-on this article to see some code in action.[^2]
-
-## Where Math and Programming Differ
-
-So math is syntactically ambiguous. It seems that as long as there is a valid way to interpret something, it's fine.
-
-Same snippet with line numbers and line highlighting:
-
-```ts,hl_lines=6,linenos
-function timesTwo(x: number): number {
-   const y = Math.floor(x) * 2;
-   if (y % 2 === 0) {
-      return y;
-   }
-}
-```
-
-TypeScript isn't fond of this at all.
-
-> Function lacks ending return statement and return type does not include 'undefined'
-
-We, as humans, know that since `y` is always an integer multiple of 2, `y` modulo 2 will always be 0.
-Unfortunately, TypeScript isn't that clever yet.
-
-
-## Easing into Math
-
-$y = \\{2a\\,|\\,a \in \mathbb{Z}\\}$ and that therefore $\forall b \in y : mod(b, 2) = 0$
-
 
 ## Citations
 
@@ -329,6 +504,9 @@ $y = \\{2a\\,|\\,a \in \mathbb{Z}\\}$ and that therefore $\forall b \in y : mod(
 2. H. Geuvers, Introduction to Type Theory. [Online]. Available: https://www.cs.ru.nl/~herman/onderwijs/provingwithCA/paper-lncs.pdf. Accessed: Mar. 13, 2025.
 3. B. C. Pierce, Types and Programming Languages Cambridge, MA, USA: MIT Press, 2002.
 
-## Links
+## Footnotes
 
-[^1]: `int | float` is a valid way to write that, but I didn't want to introduce union types just yet.
+[^1]: `int | float` is a valid way to write that, but I didn't want to introduce
+union types just yet.
+
+[^2]: People call things *weakly-typed* when they don't like what happens.
