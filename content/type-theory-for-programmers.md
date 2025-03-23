@@ -26,6 +26,9 @@ tags = ["math", "type theory", "computer science"]
       margin: 5px !important;
       /* border-radius: 0 !important; */
    }
+   table.center td {
+      text-align: center;
+   }
 </style>
 
 A program can be thought of as a mathematical function; it takes data in and it gives data out.
@@ -339,7 +342,7 @@ The following are sets containing only 1, 2, and 3 and they are all equivalent:
 - $\\{1, 2, 3, 1\\}$
 - $\\{3, 2, 1\\}$
 
-To write `a` is an element of `A`, we write $a\\,\in\\,A$.
+To write "`a` is an element of `A`", we write $a\\,\in\\,A$.
 
 <center>
 
@@ -468,35 +471,218 @@ proof is ungood.
 *I;m Thinking About Thos Types*
 
 
-## Motivation for Type Theories
+## Assembling a Type Theory
 
 It'd be just great if we could mechanize this process.
-
-From here on out, let's use $x$, $y$, and $z$ to refer to expressions. They could be any expression such as:
-
-- `1 + 2`
-- `5 * f(3)`
-- `"hello" + " world"`
-- `foobar`
-
-
-
-In today's blog post, we're going to be trying to understand this:
+Once again, I will introduce more notation[^3]:
 
 $$
-\frac{\Gamma \vdash f : \tau \rightarrow \tau' \quad \Gamma \vdash x : \tau}{\Gamma \vdash f\\,x : \tau'}
+\frac{\textit{Premise}_1\quad...\quad\textit{Premise}_n}{\textit{Conclusion}}\textit{Name}
 $$
 
-Today we are going to look at simple type theory. I've often found type theory
-to be somewhat inaccessible because of the notational barrier and so this is a
-guide for programmers to get into type theory.
+This is no fraction! This is an inference rule. Let's look at a few examples:
 
-To start off with, we're going to need to get you familiar with sets and math.
+<table>
+<tr>
+<td>
 
-Unlike programming languages, math is much more fluid and there is sometimes syntactic ambiguity.
+$$
+\frac{\text{Raining}}{\text{Wet In My Garden}}
+$$
 
-First, I'm going to introduce basic set theory.
+</td>
+<td>
 
+$$
+\frac{\text{Sprinklers On}}{\text{Wet In My Garden}}
+$$
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+
+$$
+\frac{\text{Flowers in My Garden} \quad \text{Wet In My Garden}}{\text{Flowers Watered}}
+$$
+
+</td>
+</tr>
+</table>
+
+From these rules, I can prove that if it is raining **and** I have flowers in my
+garden, then my flowers are watered.
+
+$$
+\frac{\dfrac{\text{Raining}}{\text{Wet In My Garden}}\quad\text{Flowers in My Garden}}{\text{Flowers Watered}}
+$$
+
+Also, if we can prove something without a premise, we simply omit the premises
+entirely:
+
+$$
+\frac{}{\text{Types Are Wonderful!}}
+$$
+
+Fun, right?
+Let's get some type theory going by writing inference rules for the JavaScript
+`+` operator.
+
+First, recursively define JavaScript expressions and create notation:
+
+- $n$ is any $\mathbb{R}$
+- $s$ is any `string`
+- $e$ is an expression, which is one of:
+   - $n$
+   - $s$
+   - $e_1 + e_2$
+
+Subscripting any of these just distinguishes them.
+$n_1$ and $n_2$ are both Reals, but not necessarily the same one.
+
+Here are some JavaScript expressions written out in symbols:
+
+<table>
+<tr>
+<td>
+
+$$
+[s]
+$$
+
+</td>
+<td>
+
+$$
+[e_1 + s]
+$$
+
+</td>
+<td>
+
+$$
+[n + e_1 + s]
+$$
+
+</td>
+<td>
+
+$$
+[e_2 + e_1 + n + n]
+$$
+
+</td>
+</table>
+
+For clarity, let's always use brackets around the whole expression.
+
+Next, let's define our types.
+
+- $\diamond$ (diamond)
+- $\omega$ (omega)
+- $\tau$ (tau) is a type, which is one of:
+   - $\diamond$
+   - $\omega$
+
+Now, I'm not going to tell you what $\diamond$ and $\omega$ are but I will show
+you how they're used.
+
+<table>
+<tr>
+<td>
+
+$$
+\frac{}{[n] : \diamond}
+$$
+
+</td>
+<td>
+
+$$
+\frac{}{[s] : \omega}
+$$
+
+</td>
+<td>
+
+$$
+\frac{e_1 : \diamond \quad e_2 : \diamond}{[e_1 + e_2] : \diamond}
+$$
+
+</td>
+</tr>
+<tr>
+<td>
+
+$$
+\frac{e_1 : \omega \quad e_2 : \diamond}{[e_1 + e_2] : \omega}
+$$
+
+</td>
+<td>
+
+$$
+\frac{e_1 : \diamond \quad e_2 : \omega}{[e_1 + e_2] : \omega}
+$$
+
+</td>
+<td>
+
+$$
+\frac{e_1 : \omega \quad e_2 : \omega}{[e_1 + e_2] : \omega}
+$$
+
+</td>
+</tr>
+</table>
+
+Recall the rules of the JavaScript `+` operator:
+
+```ts
+number + number => number
+string + any    => string
+any    + string => string
+```
+
+Try to understand the notation and guess what $\diamond$ and $\omega$ mean.
+Then open the answer below.
+
+<details>
+   <summary>Answer</summary>
+
+   When I write $[e] : \tau$, read "the JavaScript expression $e$ has type $\tau$".
+
+   - $\diamond$ is for numbers
+   - $\omega$ is for strings
+
+   These are not sets. They are simply symbols that we'll attach to JavaScript
+   expressions using the colon.
+
+   <table class="center">
+   <tr><td>Type Theory</td><td>English</td></tr>
+   <tr>
+   <td>
+   $$
+   \frac{e_1 : \diamond \quad e_2 : \omega}{[e_1 + e_2] : \omega}
+   $$
+   </td>
+   <td>
+
+   If the type of $e_1$ is `number` and the type of $e_2$ is `string`,
+
+   then the type of $e_1 + e_2$ is `string`.
+
+   </td>
+   </tr>
+   </table>
+</details>
+
+## Adding Variables and Context
+
+$$
+\frac{\Gamma \vdash [e_1] : \tau_1 \rightarrow \tau_2 \quad \Gamma \vdash [e_2] : \tau_1}{\Gamma \vdash [e_1(e_2)] : \tau_2}
+$$
 
 ## Citations
 
@@ -510,3 +696,5 @@ First, I'm going to introduce basic set theory.
 union types just yet.
 
 [^2]: People call things *weakly-typed* when they don't like what happens.
+
+[^3]: This notation is called "Gentzen-style Natural Deduction"
