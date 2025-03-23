@@ -8,6 +8,10 @@ tags = ["math", "type theory", "computer science"]
 +++
 
 <style>
+   html, body {
+      overflow-x: inherit;
+   }
+
    pre code table mark {
       background-color:rgba(192, 69, 122, 0.67) !important;
       color: #ffffff; /* White text for better contrast */
@@ -31,15 +35,9 @@ tags = ["math", "type theory", "computer science"]
    }
 </style>
 
-A program can be thought of as a mathematical function; it takes data in and it gives data out.
-There are many different *types* of data.
-
-```py
-32.1
-"hello!"
-```
-
-Each value has a *type* associated with it. `32.1` is a `number` and `"hello!"`
+A program can be thought of as functions. They take some input data and
+produce some output data.
+Each value has a type associated with it. `32.1` is a `number` and `"hello!"`
 is a string.
 Types for the same conceptual value might not be the same in every programming
 language.
@@ -52,7 +50,7 @@ languages differentiate between integers and other real numbers.
       `JavaScript in ${Math.random() * 100 + 100 | 0} Seconds`;
 </script>
 
-To get on the same page, this post is going to use JavaScript for it's examples.
+To get on the same page, this post is going to use JavaScript for its examples.
 If you already know JavaScript and TypeScript, you can
 [skip ahead](#dynamic-typing).
 
@@ -94,7 +92,7 @@ Here are some different types in a few programming languages:
 This is not an exhaustive list but it should be enough to get us up and running.
 
 To get familiar with the syntax of JavaScript,
-I'm going to write the same few functions in each of these languages:
+I'm going to write the same functions in each of these languages:
 
 <table>
 <tr>
@@ -218,13 +216,12 @@ We won't use advanced syntax in this post.
 
 ## Dynamic Typing
 
-In dynamically typed languages like JavaScript and Python, you are not
-guaranteed to know the type of variables.
+In dynamically typed languages like JavaScript and Python, you don't always know
+the type of a variable when you're writing the code.
 
 Let's look at an example program in JavaScript:
 
 ```js
-// average.js
 function average(a, b) {
    return (a + b) / 2;
 }
@@ -241,10 +238,8 @@ average("uh", "oh");   => NaN
 
 Depending on the types of the arguments, something *very* different happens.
 Particularly on lines 3 and 4.
-
 In JavaScript, when you add two numbers, you get another number.
 But when you add two strings, you get another string.
-
 Additionally, anything plus a string gets you another string.
 People call this behavior *weak-typing*[^2].
 
@@ -257,11 +252,11 @@ null + "y" == "nully"
 
 ## Graduating to Static Typing
 
+We can do better.
 Let's switch to TypeScript and start adding types to our arguments.
-We'd like to prohibit certain inputs that make the function behave strangely.
+We'd like to prohibit inputs that make the function behave strangely.
 
 ```ts,hl_lines=6-7,linenos
-// average.ts
 function average(a: number, b: number): number {
    return (a + b) / 2;
 }
@@ -276,7 +271,7 @@ As desired. In this case, we used types to constrain the function domain,
 thereby shrinking the program execution space to something more representative
 of "average". A smaller execution space is easier to reason about.
 
-With static typing, we can catch bugs that would otherwise be very rare:
+With static typing, we can catch rare bugs:
 
 ```ts,hl_lines=7,linenos
 let x;
@@ -289,14 +284,11 @@ if (Math.random() > 0.001) {
 }
 ```
 
-Another way of thinking about types is as sets.
-
 ## Easing Into Math
 
 Our next code sample is rather contrived:
 
-```ts,hl_lines=8,linenos
-// times_two.ts
+```ts,hl_lines=7,linenos
 function times_two(x: number): number {
    const y = Math.floor(x) * 2;
    if (y % 2 === 0) {
@@ -468,9 +460,6 @@ But there's a huge problem: we had to use our brain.
 Brains can make mistakes and can be convinced of things that are untrue so this
 proof is ungood.
 
-*I;m Thinking About Thos Types*
-
-
 ## Assembling a Type Theory
 
 It'd be just great if we could mechanize this process.
@@ -607,7 +596,7 @@ $$
 <td>
 
 $$
-\frac{e_1 : \diamond \quad e_2 : \diamond}{[e_1 + e_2] : \diamond}
+\frac{[e_1] : \diamond \quad [e_2] : \diamond}{[e_1 + e_2] : \diamond}
 $$
 
 </td>
@@ -616,21 +605,21 @@ $$
 <td>
 
 $$
-\frac{e_1 : \omega \quad e_2 : \diamond}{[e_1 + e_2] : \omega}
+\frac{[e_1] : \omega \quad [e_2] : \diamond}{[e_1 + e_2] : \omega}
 $$
 
 </td>
 <td>
 
 $$
-\frac{e_1 : \diamond \quad e_2 : \omega}{[e_1 + e_2] : \omega}
+\frac{[e_1] : \diamond \quad [e_2] : \omega}{[e_1 + e_2] : \omega}
 $$
 
 </td>
 <td>
 
 $$
-\frac{e_1 : \omega \quad e_2 : \omega}{[e_1 + e_2] : \omega}
+\frac{[e_1] : \omega \quad [e_2] : \omega}{[e_1 + e_2] : \omega}
 $$
 
 </td>
@@ -678,11 +667,235 @@ Then open the answer below.
    </table>
 </details>
 
-## Adding Variables and Context
+## Functions, Variables, and Context! Oh My!
+
+What about functions and variables? For those, we will have to extend both the
+JavaScript expression grammar and the type grammar:
+
+- $n$ is any $\mathbb{R}$
+- $s$ is any `string`
+- $v$ is a variable, which is one of: ‼️
+   - $x$
+   - $y$
+   - $z$
+- $e$ is an expression, which is one of:
+   - $n$
+   - $s$
+   - $v$
+   - $e_1 + e_2$
+   - $v \Rightarrow e$ is a lambda‼️
+   - $e_1(e_2)$ is a lambda call‼️
+- $\diamond$ is any `number`
+- $\omega$ is any `string`
+- $\tau$ is a type, which is one of:
+   - $\diamond$
+   - $\omega$
+   - $\tau_1 \rightarrow \tau_2$ is a function from $\tau_1$ to $\tau_2$‼️
+
+"Wait, where are the functions I was promised?", you ask.
+
+Instead of functions, we're going to have lambdas[^4].
+They work like so:
+$\textit{Parameter Name} \Rightarrow \textit{Return Expression}$
+
+```ts
+function add_three(a) {
+   return a + 3;
+}
+
+// equivalent
+
+add_three = a => a + 3;
+```
+
+Now consider the following program:
 
 $$
-\frac{\Gamma \vdash [e_1] : \tau_1 \rightarrow \tau_2 \quad \Gamma \vdash [e_2] : \tau_1}{\Gamma \vdash [e_1(e_2)] : \tau_2}
+[(x \Rightarrow x + 1)(2) + (x \Rightarrow x + 1)(\textcolor{green}{\texttt{"2"}})]
 $$
+
+What is the type of $[x + 1]$? Well, that depends on the context, doesn't it?
+
+<table>
+<tr>
+<td>
+
+$$
+\frac{[x] : \diamond}{[x + 1] : \diamond}
+$$
+
+</td>
+<td>
+
+$$
+\frac{[x] : \omega}{[x + 1] : \omega}
+$$
+
+</td>
+</tr>
+</table>
+
+But this notation only allows us to have *one* type for $x$.
+We'll have to think differently now.
+
+Introducing $\Gamma$ (Gamma), the type context!
+Think of it like a dictionary of resolved types for variables[^6].
+
+```ts
+Γ = {v1: 𝜏1, v2: 𝜏2, ...};
+```
+
+When I write $\Gamma \vdash [x] : \tau$, read
+"In a certain context $\Gamma$, $x$ has type $\tau$"[^5].
+
+<table>
+   <tr>
+   <td>
+
+   Using this new notation, I can stuff type judgements like
+   "$x$ has type $\tau$" into $\Gamma$.
+
+   </td>
+   <td>
+
+$$
+\frac{}{\Gamma \vdash [x] : \tau}
+$$
+
+   </td>
+   </tr>
+   <tr>
+   <td>
+
+   And I can *"query"* $\Gamma$ for "$y$ has type $\diamond$" and
+   conditionally do something if it exists.
+
+   </td>
+   <td>
+$$
+\frac{\Gamma \vdash [y]: \diamond}{\text{Something}}
+$$
+   </td>
+   </tr>
+</table>
+
+
+Let's update our inference rules.
+
+<table>
+<tr>
+<td>
+
+$$
+\frac{}{[n] : \diamond}
+$$
+
+</td>
+<td>
+
+$$
+\frac{}{[s] : \omega}
+$$
+
+</td>
+<td>
+
+$$
+\frac{\Gamma \vdash [e_1] : \diamond \qquad\Gamma \vdash [e_2] : \diamond}{\Gamma \vdash [e_1 + e_2] : \diamond}
+$$
+
+</td>
+</tr>
+<tr>
+<td>
+
+$$
+\frac{\Gamma \vdash [e_1] : \tau \qquad\Gamma \vdash [e_2] : \omega}{\Gamma \vdash [e_1 + e_2] : \omega}
+$$
+
+</td>
+<td>
+
+$$
+\frac{\Gamma \vdash [e_1] : \omega \qquad\Gamma \vdash [e_2] : \tau}{\Gamma \vdash [e_1 + e_2] : \omega}
+$$
+
+</td>
+<td>
+‼️
+$$
+\frac{\Gamma \\,[v] : \tau_1 \Gamma \vdash [e] : \tau_2}{\Gamma \vdash [v \Rightarrow e] : \tau_1 \rightarrow \tau_2}
+$$
+
+</td>
+</tr>
+<tr>
+
+<td colspan="2">
+‼️
+$$
+\frac{\Gamma \vdash [e_1] : \tau_1 \rightarrow \tau_2 \qquad \Gamma \vdash [e_2] : \tau_1}{\Gamma \vdash [e_1(e_2)] : \tau_2}
+$$
+</td>
+
+</tr>
+</table>
+
+There are two brand new rules. I would encourage you to try and work them out
+on your own and then check your understanding below.
+
+<details>
+   <summary>The Last Two Rules</summary>
+
+   <table class="center">
+   <tr><td>Type Theory</td><td>English</td></tr>
+   <tr>
+   <td>
+$$
+\frac{\Gamma \\,[\textcolor{teal}{v}] : \textcolor{blue}{\tau_1} \vdash [\textcolor{magenta}{e}] : \textcolor{purple}{\tau_2}}{\Gamma \vdash [\textcolor{teal}{v} \Rightarrow \textcolor{magenta}{e}] : \textcolor{blue}{\tau_1} \rightarrow \textcolor{purple}{\tau_2}}
+$$
+   </td>
+   <td>
+
+   This one makes more sense if we have an actual example. Let us instantiate
+   $v$ and $e$:
+
+$$
+\textcolor{teal}{v} = x\qquad \textcolor{magenta}{e}=[\textcolor{teal}{x} + 1]
+$$
+
+   Hypothetically, if we add the typing judgement
+   $\textcolor{teal}{x} : \textcolor{blue}{\diamond}$
+   to the context $\Gamma$, that causes $\textcolor{magenta}{x + 1}$ to have
+   type $\textcolor{purple}{\diamond}$.
+
+   Because of that, a function whose
+   parameter is $\textcolor{teal}{x}$ and returns $\textcolor{magenta}{x + 1}$
+   has the type $\textcolor{blue}{\diamond} \rightarrow \textcolor{purple}{\diamond}$
+
+   </td>
+   </tr>
+      <tr>
+   <td>
+$$
+\frac{\Gamma \vdash [e_1] : \tau_1 \rightarrow \tau_2 \qquad \Gamma \vdash [e_2] : \tau_1}{\Gamma \vdash [e_1(e_2)] : \tau_2}
+$$
+   </td>
+   <td>
+
+   If you have a function $e_1$ that takes $\tau_1$ and returns $\tau_2$, then
+   calling it with an argument $e_2$ of type $\tau_1$ gets you $\tau_2$.
+   </td>
+   </tr>
+   </table>
+</details>
+
+<!-- Whenever we go into a sub-context, we'll end up using a new $\Gamma$ that
+inherits all type resolutions from the outer context[^6]. -->
+
+Thank you for reading and happy typing!
+
+*I;m Thinking About Thos Types :)*
 
 ## Citations
 
@@ -698,3 +911,10 @@ union types just yet.
 [^2]: People call things *weakly-typed* when they don't like what happens.
 
 [^3]: This notation is called "Gentzen-style Natural Deduction"
+
+[^4]: Praise Church. Search up "Lambda Calculus" if you want to learn more.
+
+[^5]: $\Gamma \vdash ...$ is actually the same thing as $\frac{\Gamma}{...}$,
+but that would be too confusing to explain inline.
+
+[^6]: This is a half-truth, only useful insofar as it helps intuition.
