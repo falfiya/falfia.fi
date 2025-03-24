@@ -38,7 +38,7 @@ tags = ["math", "type theory", "computer science"]
 A program can be thought of as functions. They take some input data and
 produce some output data.
 Each value has a type associated with it. `32.1` is a `number` and `"hello!"`
-is a string.
+is a `string`.
 Types for the same conceptual value might not be the same in every programming
 language.
 In C, C++, Java, and Python, `32.1` is a `float`. Unlike JavaScript, these
@@ -256,7 +256,7 @@ We can do better.
 Let's switch to TypeScript and start adding types to our arguments.
 We'd like to prohibit inputs that make the function behave strangely.
 
-```ts,hl_lines=6-7,linenos
+```ts,hl_lines=5-6,linenos
 function average(a: number, b: number): number {
    return (a + b) / 2;
 }
@@ -824,7 +824,7 @@ $$
 <td>
 ‼️
 $$
-\frac{\Gamma \\,[v] : \tau_1 \Gamma \vdash [e] : \tau_2}{\Gamma \vdash [v \Rightarrow e] : \tau_1 \rightarrow \tau_2}
+\frac{\Gamma \\,[v] : \tau_1 \vdash [e] : \tau_2}{\Gamma \vdash [v \Rightarrow e] : \tau_1 \rightarrow \tau_2}
 $$
 
 </td>
