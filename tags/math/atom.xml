@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - math</title>
+    <link rel="self" type="application/atom+xml" href="https://falfia.fi/tags/math/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://falfia.fi"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-03-22T00:00:00+00:00</updated>
+    <id>https://falfia.fi/tags/math/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Introduction to Type Theory for Programmers</title>
+        <published>2025-03-22T00:00:00+00:00</published>
+        <updated>2025-03-22T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://falfia.fi/intro-type-theory-for-prog/"/>
+        <id>https://falfia.fi/intro-type-theory-for-prog/</id>
+        
+        <content type="html" xml:base="https://falfia.fi/intro-type-theory-for-prog/">&lt;style&gt;
+   html, body {
+      overflow-x: inherit;
+   }
+
+   pre code table mark {
+      background-color:rgba(192, 69, 122, 0.67) !important;
+      color: #ffffff; &#x2F;* White text for better contrast *&#x2F;
+   }
+   table tbody td:first-child {
+      font-weight: inherit !important;
+   }
+   table td {
+      vertical-align: middle;
+   }
+   table td p {
+      line-height: 1.5em;
+      margin: 0 !important;
+   }
+   table td pre {
+      margin: 5px !important;
+      &#x2F;* border-radius: 0 !important; *&#x2F;
+   }
+   table.center td {
+      text-align: center;
+   }
+&lt;&#x2F;style&gt;
+&lt;p&gt;A program can be thought of as functions. They take some input data and
+produce some output data.
+Each value has a type associated with it. &lt;code&gt;32.1&lt;&#x2F;code&gt; is a &lt;code&gt;number&lt;&#x2F;code&gt; and &lt;code&gt;&quot;hello!&quot;&lt;&#x2F;code&gt;
+is a &lt;code&gt;string&lt;&#x2F;code&gt;.
+Types for the same conceptual value might not be the same in every programming
+language.
+In C, C++, Java, and Python, &lt;code&gt;32.1&lt;&#x2F;code&gt; is a &lt;code&gt;float&lt;&#x2F;code&gt;. Unlike JavaScript, these
+languages differentiate between integers and other real numbers.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;javascript-in-n-seconds&quot;&gt;JavaScript in 111 Seconds&lt;&#x2F;h2&gt;
+&lt;script&gt;
+   document.getElementById(&quot;javascript-in-n-seconds&quot;).innerText =
+      `JavaScript in ${Math.random() * 100 + 100 | 0} Seconds`;
+&lt;&#x2F;script&gt;
+&lt;p&gt;To get on the same page, this post is going to use JavaScript for its examples.
+If you already know JavaScript and TypeScript, you can
+&lt;a href=&quot;https:&#x2F;&#x2F;falfia.fi&#x2F;intro-type-theory-for-prog&#x2F;#dynamic-typing&quot;&gt;skip ahead&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Here are some different types in a few programming languages:&lt;&#x2F;p&gt;
+&lt;table&gt;
+   &lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;JavaScript&lt;&#x2F;th&gt;&lt;th&gt;C&#x2F;C++&lt;&#x2F;th&gt;&lt;th&gt;Java&lt;&#x2F;th&gt;&lt;th&gt;Python&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;
+   &lt;tr&gt;&lt;td&gt;Real Number ($\mathbb{R}$)&lt;&#x2F;td&gt;
+   &lt;td&gt;number&lt;&#x2F;td&gt;
+   &lt;td&gt;int
+&lt;p&gt;unsigned int&lt;&#x2F;p&gt;
+&lt;p&gt;float&lt;&#x2F;p&gt;
+&lt;p&gt;double&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;int
+&lt;p&gt;float&lt;&#x2F;p&gt;
+&lt;p&gt;double&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;int
+&lt;p&gt;float&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;tr&gt;&lt;td&gt;String&lt;&#x2F;td&gt;&lt;td&gt;string&lt;&#x2F;td&gt;&lt;td&gt;char *&lt;&#x2F;td&gt;&lt;td&gt;String&lt;&#x2F;td&gt;&lt;td&gt;str&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+   &lt;tr&gt;&lt;td&gt;Nothing&lt;&#x2F;td&gt;&lt;td&gt;
+   undefined
+&lt;p&gt;null&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;void&lt;&#x2F;td&gt;&lt;td&gt;void&lt;&#x2F;td&gt;&lt;td&gt;None&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;This is not an exhaustive list but it should be enough to get us up and running.&lt;&#x2F;p&gt;
+&lt;p&gt;To get familiar with the syntax of JavaScript,
+I&#x27;m going to write the same functions in each of these languages:&lt;&#x2F;p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;JavaScript&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;exclaim&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s &lt;&#x2F;span&gt;&lt;span&gt;+ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;TypeScript&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;: number, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;: number): number {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;exclaim&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s&lt;&#x2F;span&gt;&lt;span&gt;: string): string {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s &lt;&#x2F;span&gt;&lt;span&gt;+ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;C &#x2F; C++&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;cxx&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-cxx &quot;&gt;&lt;code class=&quot;language-cxx&quot; data-lang=&quot;cxx&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(a + b) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;char &lt;&#x2F;span&gt;&lt;span&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;exclaim&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;char const &lt;&#x2F;span&gt;&lt;span&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;   size_t old_len = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;strlen&lt;&#x2F;span&gt;&lt;span&gt;(s);
+&lt;&#x2F;span&gt;&lt;span&gt;   size_t new_len = old_len + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;char &lt;&#x2F;span&gt;&lt;span&gt;*out = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;malloc&lt;&#x2F;span&gt;&lt;span&gt;(new_len + &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;); &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; +1 for &amp;#39;\0&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;memcpy&lt;&#x2F;span&gt;&lt;span&gt;(out, s, old_len);
+&lt;&#x2F;span&gt;&lt;span&gt;   out[old_len] = &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;;
+&lt;&#x2F;span&gt;&lt;span&gt;   out[new_len] = &amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\0&lt;&#x2F;span&gt;&lt;span&gt;&amp;#39;;
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span&gt; out;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;Java&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float&lt;&#x2F;span&gt;&lt;span&gt; a, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float&lt;&#x2F;span&gt;&lt;span&gt; b) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(a + b) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ebcb8b;&quot;&gt;String &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;exclaim&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ebcb8b;&quot;&gt;String&lt;&#x2F;span&gt;&lt;span&gt; s) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span&gt; s + &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;Python&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;py&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-py &quot;&gt;&lt;code class=&quot;language-py&quot; data-lang=&quot;py&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;):
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(a + b) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;def &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;exclaim&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;s&lt;&#x2F;span&gt;&lt;span&gt;: str) -&amp;gt; str:
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;s + &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;!&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;Besides the C one that took some memory finagling, they all more or less look
+the same.
+There are two things of note:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;The TypeScript is almost identical to the the JavaScript. The only difference
+is types attached using &lt;code&gt;: type&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;The Python program has types listed for &lt;code&gt;exclaim&lt;&#x2F;code&gt; but not &lt;code&gt;average&lt;&#x2F;code&gt;. That&#x27;s
+because &lt;code&gt;average(a: int, b: int) -&amp;gt; float&lt;&#x2F;code&gt; wouldn&#x27;t quite be accurate.
+&lt;code&gt;a&lt;&#x2F;code&gt; and &lt;code&gt;b&lt;&#x2F;code&gt; can be either &lt;code&gt;int&lt;&#x2F;code&gt; &lt;em&gt;or&lt;&#x2F;em&gt; &lt;code&gt;float&lt;&#x2F;code&gt;&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#1&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;The rest of this post will use JavaScript (and eventually TypeScript).
+We won&#x27;t use advanced syntax in this post.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;dynamic-typing&quot;&gt;Dynamic Typing&lt;&#x2F;h2&gt;
+&lt;p&gt;In dynamically typed languages like JavaScript and Python, you don&#x27;t always know
+the type of a variable when you&#x27;re writing the code.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s look at an example program in JavaScript:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I can call this function in several different ways:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;);         &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5.5&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4.5&lt;&#x2F;span&gt;&lt;span&gt;);     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;5
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;, &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);       &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;21
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;uh&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;oh&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;NaN
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Depending on the types of the arguments, something &lt;em&gt;very&lt;&#x2F;em&gt; different happens.
+Particularly on lines 3 and 4.
+In JavaScript, when you add two numbers, you get another number.
+But when you add two strings, you get another string.
+Additionally, anything plus a string gets you another string.
+People call this behavior &lt;em&gt;weak-typing&lt;&#x2F;em&gt;&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#2&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1   &lt;&#x2F;span&gt;&lt;span&gt;+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2  &lt;&#x2F;span&gt;&lt;span&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;  + &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; == &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1   &lt;&#x2F;span&gt;&lt;span&gt;+ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; == &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;null &lt;&#x2F;span&gt;&lt;span&gt;+ &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;y&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot; == &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;nully&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;graduating-to-static-typing&quot;&gt;Graduating to Static Typing&lt;&#x2F;h2&gt;
+&lt;p&gt;We can do better.
+Let&#x27;s switch to TypeScript and start adding types to our arguments.
+We&#x27;d like to prohibit inputs that make the function behave strangely.&lt;&#x2F;p&gt;
+&lt;pre data-linenos data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;: number, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;: number): number {
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;5&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;, &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;6&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;uh&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;oh&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;);
+&lt;&#x2F;span&gt;&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Argument of type &#x27;string&#x27; is not assignable to parameter of type &#x27;number&#x27;.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;As desired. In this case, we used types to constrain the function domain,
+thereby shrinking the program execution space to something more representative
+of &quot;average&quot;. A smaller execution space is easier to reason about.&lt;&#x2F;p&gt;
+&lt;p&gt;With static typing, we can catch rare bugs:&lt;&#x2F;p&gt;
+&lt;pre data-linenos data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(Math.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;random&lt;&#x2F;span&gt;&lt;span&gt;() &amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0.001&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;else &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;5&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; very rare!
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;6&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; compiler catches the bug anyways
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;7&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;average&lt;&#x2F;span&gt;&lt;span&gt;(&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;9&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;8&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;easing-into-math&quot;&gt;Easing Into Math&lt;&#x2F;h2&gt;
+&lt;p&gt;Our next code sample is rather contrived:&lt;&#x2F;p&gt;
+&lt;pre data-linenos data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;times_two&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;: number): number {
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;y &lt;&#x2F;span&gt;&lt;span&gt;= Math.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;floor&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;) * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;3&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;y &lt;&#x2F;span&gt;&lt;span&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span&gt;=== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;y&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;5&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;   }
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;6&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;7&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;mark style=&quot;background-color:#65737e30;&quot;&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F;return
+&lt;&#x2F;span&gt;&lt;&#x2F;mark&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;tr&gt;&lt;td&gt;8&lt;&#x2F;td&gt;&lt;td&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Function lacks ending return statement and return type does not include &#x27;undefined&#x27;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;We, as humans, know that &lt;code&gt;y&lt;&#x2F;code&gt; is always an integer multiple of 2. &lt;code&gt;y&lt;&#x2F;code&gt; modulo 2
+must be 0.
+Unfortunately, TypeScript isn&#x27;t that clever yet.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s try and talk about that in a more mathematical way.
+The primary motivation for math in this case is terseness, formality, and
+precision.
+To do that, we&#x27;ll need to briefly cover logic and set theory.
+If you know these, you can &lt;a href=&quot;https:&#x2F;&#x2F;falfia.fi&#x2F;intro-type-theory-for-prog&#x2F;#average.ts-explanation&quot;&gt;skip ahead&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Logical Connectives
+&lt;ul&gt;
+&lt;li&gt;Not: $\neg$&lt;&#x2F;li&gt;
+&lt;li&gt;And: $\land$&lt;&#x2F;li&gt;
+&lt;li&gt;Or: $\lor$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Quantifiers
+&lt;ul&gt;
+&lt;li&gt;Exists: $\exists$&lt;&#x2F;li&gt;
+&lt;li&gt;For All: $\forall$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Misc
+&lt;ul&gt;
+&lt;li&gt;Such That: $\text{st}$ or $\ni:$&lt;&#x2F;li&gt;
+&lt;li&gt;Therefore: $\therefore$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Sets are pretty great.
+They&#x27;re similar to arrays or lists in that they contain elements, but a set
+cannot have duplicate elements. A value is either in a set or it isn&#x27;t.
+Unlike a list, the order of elements within a set does not matter.&lt;&#x2F;p&gt;
+&lt;p&gt;A set is written using braces.
+The following are sets containing only 1, 2, and 3 and they are all equivalent:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\{1, 2, 3\}$&lt;&#x2F;li&gt;
+&lt;li&gt;$\{1, 2, 3, 1\}$&lt;&#x2F;li&gt;
+&lt;li&gt;$\{3, 2, 1\}$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;To write &quot;&lt;code&gt;a&lt;&#x2F;code&gt; is an element of &lt;code&gt;A&lt;&#x2F;code&gt;&quot;, we write $a\,\in\,A$.&lt;&#x2F;p&gt;
+&lt;center&gt;
+&lt;p&gt;$$
+\begin{array}{rcllr}
+1&amp;amp;\in &amp;amp;\{1, 2, 3\}&amp;amp; \quad&amp;amp; \text{True}\\
+4&amp;amp;\in &amp;amp;\{1, 2, 3\}&amp;amp; &amp;amp;\text{False}\\
+4&amp;amp;\cancel{\in} &amp;amp;\{1, 2, 3\}&amp;amp;&amp;amp; \text{True}\\
+\end{array}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;center&gt;
+&lt;p&gt;You can also construct sets using other sets.
+The syntax is $\{\textit{value}\,|\,\textit{conditional}\}$. For example:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\begin{align}
+\text{let}\,A &amp;amp;= \{1, 2, 3\} \\
+B &amp;amp;= \{2 * a\,|\,a\in A\} \\
+B &amp;amp;= \{2, 4, 6\}
+\end{align}
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;There are also some common set names:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Empty Set: $\text{Ø}$&lt;&#x2F;li&gt;
+&lt;li&gt;Real Numbers: $\mathbb{R}$&lt;&#x2F;li&gt;
+&lt;li&gt;Integers: $\mathbb{Z}$&lt;&#x2F;li&gt;
+&lt;li&gt;Positive Integers (Natural Numbers): $\mathbb{N}^+$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a name=&quot;average.ts-explanation&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;table&gt;
+   &lt;tr&gt;&lt;td&gt;TypeScript&lt;&#x2F;td&gt;&lt;td&gt;Math&lt;&#x2F;td&gt;&lt;td&gt;English&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;times_two&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;: number)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+$$
+x \in \mathbb{R}
+$$
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;&lt;code&gt;x&lt;&#x2F;code&gt; is &lt;em&gt;some&lt;&#x2F;em&gt; real number.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td rowspan=&quot;2&quot;&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;y &lt;&#x2F;span&gt;&lt;span&gt;= Math.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;floor&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;) * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+$$
+y = 2 * \text{floor}(x)
+$$
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;&lt;code&gt;y&lt;&#x2F;code&gt; is 2 times the floor of &lt;code&gt;x&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;$$
+y \in \{2a\,|\,a \in \mathbb{Z}\}
+$$&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;&lt;code&gt;y&lt;&#x2F;code&gt; is an integer multiple of 2.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;y &lt;&#x2F;span&gt;&lt;span&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span&gt;=== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;y&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;   }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;$$
+\therefore
+mod(y, 2) = 0
+$$&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;Therefore, &lt;code&gt;y&lt;&#x2F;code&gt; modulo 2 is 0. The conditional is always true and &lt;code&gt;y&lt;&#x2F;code&gt; is
+returned.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;Was this argument convincing? I think it was.
+But there&#x27;s a huge problem: we had to use our brain.
+Brains can make mistakes and can be convinced of things that are untrue so this
+proof is ungood.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;assembling-a-type-theory&quot;&gt;Assembling a Type Theory&lt;&#x2F;h2&gt;
+&lt;p&gt;It&#x27;d be just great if we could mechanize this process.
+Once again, I will introduce more notation&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#3&quot;&gt;3&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\frac{\textit{Premise}_1\quad...\quad\textit{Premise}_n}{\textit{Conclusion}}\textit{Name}
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;This is no fraction! This is an inference rule. Let&#x27;s look at a few examples:&lt;&#x2F;p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{\text{Raining}}{\text{Wet In My Garden}}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{\text{Sprinklers On}}{\text{Wet In My Garden}}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+&lt;p&gt;$$
+\frac{\text{Flowers in My Garden} \quad \text{Wet In My Garden}}{\text{Flowers Watered}}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;From these rules, I can prove that if it is raining &lt;strong&gt;and&lt;&#x2F;strong&gt; I have flowers in my
+garden, then my flowers are watered.&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\frac{\dfrac{\text{Raining}}{\text{Wet In My Garden}}\quad\text{Flowers in My Garden}}{\text{Flowers Watered}}
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;Also, if we can prove something without a premise, we simply omit the premises
+entirely:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\frac{}{\text{Types Are Wonderful!}}
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;Fun, right?
+Let&#x27;s get some type theory going by writing inference rules for the JavaScript
+&lt;code&gt;+&lt;&#x2F;code&gt; operator.&lt;&#x2F;p&gt;
+&lt;p&gt;First, recursively define JavaScript expressions and create notation:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;$n$ is any $\mathbb{R}$&lt;&#x2F;li&gt;
+&lt;li&gt;$s$ is any &lt;code&gt;string&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;$e$ is an expression, which is one of:
+&lt;ul&gt;
+&lt;li&gt;$n$&lt;&#x2F;li&gt;
+&lt;li&gt;$s$&lt;&#x2F;li&gt;
+&lt;li&gt;$e_1 + e_2$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Subscripting any of these just distinguishes them.
+$n_1$ and $n_2$ are both Reals, but not necessarily the same one.&lt;&#x2F;p&gt;
+&lt;p&gt;Here are some JavaScript expressions written out in symbols:&lt;&#x2F;p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+[s]
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+[e_1 + s]
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+[n + e_1 + s]
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+[e_2 + e_1 + n + n]
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;For clarity, let&#x27;s always use brackets around the whole expression.&lt;&#x2F;p&gt;
+&lt;p&gt;Next, let&#x27;s define our types.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\diamond$ (diamond)&lt;&#x2F;li&gt;
+&lt;li&gt;$\omega$ (omega)&lt;&#x2F;li&gt;
+&lt;li&gt;$\tau$ (tau) is a type, which is one of:
+&lt;ul&gt;
+&lt;li&gt;$\diamond$&lt;&#x2F;li&gt;
+&lt;li&gt;$\omega$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Now, I&#x27;m not going to tell you what $\diamond$ and $\omega$ are but I will show
+you how they&#x27;re used.&lt;&#x2F;p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{}{[n] : \diamond}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{}{[s] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{[e_1] : \diamond \quad [e_2] : \diamond}{[e_1 + e_2] : \diamond}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{[e_1] : \omega \quad [e_2] : \diamond}{[e_1 + e_2] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{[e_1] : \diamond \quad [e_2] : \omega}{[e_1 + e_2] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{[e_1] : \omega \quad [e_2] : \omega}{[e_1 + e_2] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;Recall the rules of the JavaScript &lt;code&gt;+&lt;&#x2F;code&gt; operator:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;number &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;number &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;number
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;string &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;any    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;string
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;any    &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;string &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;string
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Try to understand the notation and guess what $\diamond$ and $\omega$ mean.
+Then open the answer below.&lt;&#x2F;p&gt;
+&lt;details&gt;
+   &lt;summary&gt;Answer&lt;&#x2F;summary&gt;
+&lt;p&gt;When I write $[e] : \tau$, read &quot;the JavaScript expression $e$ has type $\tau$&quot;.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\diamond$ is for numbers&lt;&#x2F;li&gt;
+&lt;li&gt;$\omega$ is for strings&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;These are not sets. They are simply symbols that we&#x27;ll attach to JavaScript
+expressions using the colon.&lt;&#x2F;p&gt;
+   &lt;table class=&quot;center&quot;&gt;
+   &lt;tr&gt;&lt;td&gt;Type Theory&lt;&#x2F;td&gt;&lt;td&gt;English&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+   $$
+   \frac{e_1 : \diamond \quad e_2 : \omega}{[e_1 + e_2] : \omega}
+   $$
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;If the type of $e_1$ is &lt;code&gt;number&lt;&#x2F;code&gt; and the type of $e_2$ is &lt;code&gt;string&lt;&#x2F;code&gt;,&lt;&#x2F;p&gt;
+&lt;p&gt;then the type of $e_1 + e_2$ is &lt;code&gt;string&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;&#x2F;table&gt;
+&lt;&#x2F;details&gt;
+&lt;h2 id=&quot;functions-variables-and-context-oh-my&quot;&gt;Functions, Variables, and Context! Oh My!&lt;&#x2F;h2&gt;
+&lt;p&gt;What about functions and variables? For those, we will have to extend both the
+JavaScript expression grammar and the type grammar:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;$n$ is any $\mathbb{R}$&lt;&#x2F;li&gt;
+&lt;li&gt;$s$ is any &lt;code&gt;string&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;$v$ is a variable, which is one of: ‼️
+&lt;ul&gt;
+&lt;li&gt;$x$&lt;&#x2F;li&gt;
+&lt;li&gt;$y$&lt;&#x2F;li&gt;
+&lt;li&gt;$z$&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;$e$ is an expression, which is one of:
+&lt;ul&gt;
+&lt;li&gt;$n$&lt;&#x2F;li&gt;
+&lt;li&gt;$s$&lt;&#x2F;li&gt;
+&lt;li&gt;$v$&lt;&#x2F;li&gt;
+&lt;li&gt;$e_1 + e_2$&lt;&#x2F;li&gt;
+&lt;li&gt;$v \Rightarrow e$ is a lambda‼️&lt;&#x2F;li&gt;
+&lt;li&gt;$e_1(e_2)$ is a lambda call‼️&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;$\diamond$ is any &lt;code&gt;number&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;$\omega$ is any &lt;code&gt;string&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;$\tau$ is a type, which is one of:
+&lt;ul&gt;
+&lt;li&gt;$\diamond$&lt;&#x2F;li&gt;
+&lt;li&gt;$\omega$&lt;&#x2F;li&gt;
+&lt;li&gt;$\tau_1 \rightarrow \tau_2$ is a function from $\tau_1$ to $\tau_2$‼️&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&quot;Wait, where are the functions I was promised?&quot;, you ask.&lt;&#x2F;p&gt;
+&lt;p&gt;Instead of functions, we&#x27;re going to have lambdas&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#4&quot;&gt;4&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;.
+They work like so:
+$\textit{Parameter Name} \Rightarrow \textit{Return Expression}$&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;add_three&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;&#x2F;&#x2F; equivalent
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;add_three &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now consider the following program:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+[(x \Rightarrow x + 1)(2) + (x \Rightarrow x + 1)(\textcolor{green}{\texttt{&quot;2&quot;}})]
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;What is the type of $[x + 1]$? Well, that depends on the context, doesn&#x27;t it?&lt;&#x2F;p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{[x] : \diamond}{[x + 1] : \diamond}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{[x] : \omega}{[x + 1] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;But this notation only allows us to have &lt;em&gt;one&lt;&#x2F;em&gt; type for $x$.
+We&#x27;ll have to think differently now.&lt;&#x2F;p&gt;
+&lt;p&gt;Introducing $\Gamma$ (Gamma), the type context!
+Think of it like a dictionary of resolved types for variables&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#6&quot;&gt;5&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ts&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-ts &quot;&gt;&lt;code class=&quot;language-ts&quot; data-lang=&quot;ts&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Γ &lt;&#x2F;span&gt;&lt;span&gt;= {v1: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;𝜏1&lt;&#x2F;span&gt;&lt;span&gt;, v2: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;𝜏2&lt;&#x2F;span&gt;&lt;span&gt;, ...};
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;When I write $\Gamma \vdash [x] : \tau$, read
+&quot;In a certain context $\Gamma$, $x$ has type $\tau$&quot;&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#5&quot;&gt;6&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;.&lt;&#x2F;p&gt;
+&lt;table&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;Using this new notation, I can stuff type judgements like
+&quot;$x$ has type $\tau$&quot; into $\Gamma$.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;$$
+\frac{}{\Gamma \vdash [x] : \tau}
+$$&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+&lt;p&gt;And I can &lt;em&gt;&quot;query&quot;&lt;&#x2F;em&gt; $\Gamma$ for &quot;$y$ has type $\diamond$&quot; and
+conditionally do something if it exists.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+$$
+\frac{\Gamma \vdash [y]: \diamond}{\text{Something}}
+$$
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;Let&#x27;s update our inference rules.&lt;&#x2F;p&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{}{[n] : \diamond}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{}{[s] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{\Gamma \vdash [e_1] : \diamond \qquad\Gamma \vdash [e_2] : \diamond}{\Gamma \vdash [e_1 + e_2] : \diamond}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{\Gamma \vdash [e_1] : \tau \qquad\Gamma \vdash [e_2] : \omega}{\Gamma \vdash [e_1 + e_2] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+&lt;p&gt;$$
+\frac{\Gamma \vdash [e_1] : \omega \qquad\Gamma \vdash [e_2] : \tau}{\Gamma \vdash [e_1 + e_2] : \omega}
+$$&lt;&#x2F;p&gt;
+&lt;&#x2F;td&gt;
+&lt;td&gt;
+‼️
+$$
+\frac{\Gamma \\,[v] : \tau_1 \vdash [e] : \tau_2}{\Gamma \vdash [v \Rightarrow e] : \tau_1 \rightarrow \tau_2}
+$$
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+‼️
+$$
+\frac{\Gamma \vdash [e_1] : \tau_1 \rightarrow \tau_2 \qquad \Gamma \vdash [e_2] : \tau_1}{\Gamma \vdash [e_1(e_2)] : \tau_2}
+$$
+&lt;&#x2F;td&gt;
+&lt;&#x2F;tr&gt;
+&lt;&#x2F;table&gt;
+&lt;p&gt;There are two brand new rules. I would encourage you to try and work them out
+on your own and then check your understanding below.&lt;&#x2F;p&gt;
+&lt;details&gt;
+   &lt;summary&gt;The Last Two Rules&lt;&#x2F;summary&gt;
+   &lt;table class=&quot;center&quot;&gt;
+   &lt;tr&gt;&lt;td&gt;Type Theory&lt;&#x2F;td&gt;&lt;td&gt;English&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+   &lt;tr&gt;
+   &lt;td&gt;
+$$
+\frac{\Gamma \\,[\textcolor{teal}{v}] : \textcolor{blue}{\tau_1} \vdash [\textcolor{magenta}{e}] : \textcolor{purple}{\tau_2}}{\Gamma \vdash [\textcolor{teal}{v} \Rightarrow \textcolor{magenta}{e}] : \textcolor{blue}{\tau_1} \rightarrow \textcolor{purple}{\tau_2}}
+$$
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;This one makes more sense if we have an actual example. Let us instantiate
+$v$ and $e$:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\textcolor{teal}{v} = x\qquad \textcolor{magenta}{e}=[\textcolor{teal}{x} + 1]
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;Hypothetically, if we add the typing judgement
+$\textcolor{teal}{x} : \textcolor{blue}{\diamond}$
+to the context $\Gamma$, that causes $\textcolor{magenta}{x + 1}$ to have
+type $\textcolor{purple}{\diamond}$.&lt;&#x2F;p&gt;
+&lt;p&gt;Because of that, a function whose
+parameter is $\textcolor{teal}{x}$ and returns $\textcolor{magenta}{x + 1}$
+has the type $\textcolor{blue}{\diamond} \rightarrow \textcolor{purple}{\diamond}$&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+      &lt;tr&gt;
+   &lt;td&gt;
+$$
+\frac{\Gamma \vdash [e_1] : \tau_1 \rightarrow \tau_2 \qquad \Gamma \vdash [e_2] : \tau_1}{\Gamma \vdash [e_1(e_2)] : \tau_2}
+$$
+   &lt;&#x2F;td&gt;
+   &lt;td&gt;
+&lt;p&gt;If you have a function $e_1$ that takes $\tau_1$ and returns $\tau_2$, then
+calling it with an argument $e_2$ of type $\tau_1$ gets you $\tau_2$.&lt;&#x2F;p&gt;
+   &lt;&#x2F;td&gt;
+   &lt;&#x2F;tr&gt;
+   &lt;&#x2F;table&gt;
+&lt;&#x2F;details&gt;
+&lt;!-- Whenever we go into a sub-context, we&#x27;ll end up using a new $\Gamma$ that
+inherits all type resolutions from the outer context[^6]. --&gt;
+&lt;p&gt;Thank you for reading and happy typing!&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;I;m Thinking About Thos Types :)&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;citations&quot;&gt;Citations&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;F. Shinko, Introduction to type theory. [Online]. Available: https:&#x2F;&#x2F;math.berkeley.edu&#x2F;~forte&#x2F;notes&#x2F;type_theory.pdf. Accessed: Mar. 12, 2025.&lt;&#x2F;li&gt;
+&lt;li&gt;H. Geuvers, Introduction to Type Theory. [Online]. Available: https:&#x2F;&#x2F;www.cs.ru.nl&#x2F;~herman&#x2F;onderwijs&#x2F;provingwithCA&#x2F;paper-lncs.pdf. Accessed: Mar. 13, 2025.&lt;&#x2F;li&gt;
+&lt;li&gt;B. C. Pierce, Types and Programming Languages Cambridge, MA, USA: MIT Press, 2002.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;&#x2F;h2&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;1&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;1&lt;&#x2F;sup&gt;
+&lt;p&gt;&lt;code&gt;int | float&lt;&#x2F;code&gt; is a valid way to write that, but I didn&#x27;t want to introduce
+union types just yet.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;2&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;2&lt;&#x2F;sup&gt;
+&lt;p&gt;People call things &lt;em&gt;weakly-typed&lt;&#x2F;em&gt; when they don&#x27;t like what happens.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;3&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;3&lt;&#x2F;sup&gt;
+&lt;p&gt;This notation is called &quot;Gentzen-style Natural Deduction&quot;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;4&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;4&lt;&#x2F;sup&gt;
+&lt;p&gt;Praise Church. Search up &quot;Lambda Calculus&quot; if you want to learn more.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;5&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;6&lt;&#x2F;sup&gt;
+&lt;p&gt;$\Gamma \vdash ...$ is actually the same thing as $\frac{\Gamma}{...}$,
+but that would be too confusing to explain inline.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;6&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;5&lt;&#x2F;sup&gt;
+&lt;p&gt;This is a half-truth, only useful insofar as it helps intuition.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+</feed>

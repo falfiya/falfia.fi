@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://falfia.fi/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/categories/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/categories/tutorial/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/intro-type-theory-for-prog/</loc>
+        <lastmod>2025-03-22</lastmod>
+    </url>
+    <url>
+        <loc>https://falfia.fi/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/tags/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/tags/computer-science/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/tags/math/</loc>
+    </url>
+    <url>
+        <loc>https://falfia.fi/tags/type-theory/</loc>
+    </url>
+</urlset>
